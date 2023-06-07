@@ -22,7 +22,7 @@ jobs:
       env:
         REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
         REPOSITORY: my-ecr-repository
-        IMAGE_TAG: testing
+        IMAGE_TAG: test
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

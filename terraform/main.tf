@@ -83,7 +83,7 @@ resource "aws_launch_configuration" "my_launch_configuration" {
   name                 = "my-launch-configuration"
   image_id             = "ami-03fa477d477703122"  # Replace with your desired AMI ID
   instance_type        = "t2.micro"
-  iam_instance_profile = "my-instance-profile"
+  iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   security_groups      = [aws_security_group.my_security_group.id]
 }
 
@@ -134,3 +134,32 @@ resource "aws_ecs_service" "my_service" {
     container_port   = 80
   }
 } 
+
+
+#perms
+data "aws_iam_policy_document" "ecs_agent" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ecs_agent" {
+  name               = "ecs-agent"
+  assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "ecs_agent" {
+  role       = "aws_iam_role.ecs_agent.name"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_agent" {
+  name = "ecs-agent"
+  role = aws_iam_role.ecs_agent.name
+}
