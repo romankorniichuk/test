@@ -7,19 +7,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
- steps:
-  - name: Checkout repository
-    uses: actions/checkout@v2
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
   - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    id: login-ecr
+    uses: aws-actions/amazon-ecr-login@v1
 
   - name: Build, tag, and push docker image to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: my-ecr-repository
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    env:
+      REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      REPOSITORY: my-ecr-repository
+      IMAGE_TAG: ${{ github.sha }}
+    run: |
+      docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+      docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
