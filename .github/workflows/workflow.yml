@@ -22,7 +22,7 @@ jobs:
       env:
         REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
         REPOSITORY: my-ecr-repository
-        IMAGE_TAG: '${{ github.sha }}'
+        IMAGE_TAG: testing
       run: |
-        docker build -t test-$REPOSITORY .
-        docker push test-$REPOSITORY
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
