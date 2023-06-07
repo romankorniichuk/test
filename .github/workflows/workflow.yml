@@ -6,7 +6,7 @@ name: Build and publish a Docker image
 jobs:
   deploy:
     runs-on: ubuntu-latest
-  steps:
+    steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Login to Amazon ECR
